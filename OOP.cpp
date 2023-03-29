@@ -1,5 +1,10 @@
 #include <iostream>
 #include <cstring>
+#include <vector>
+#include <type_traits>
+
+temmple<int N>
+using Serial = std::integral_const<bool, (N > 3)>;
 
 class SerialKiller {};
 
