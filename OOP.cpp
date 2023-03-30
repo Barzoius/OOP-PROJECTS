@@ -10,9 +10,17 @@ class SerialKiller {
 private:
   int IQ;
   Serial count;
+  char* Name;
   
 public:
+  
   SerialKiller(){}
+  
+      SerialKiller(const char* n)
+    {
+        Name = new char[strlen(n) + 1];
+        strcpy(Name, n);
+    }
 };
 
 class ThrillSeeker : public virtual SerialKiller {};
