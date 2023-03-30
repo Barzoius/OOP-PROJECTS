@@ -10,6 +10,9 @@ class SerialKiller {
 private:
   int IQ;
   Serial count;
+  
+public:
+  SerialKiller(){}
 };
 
 class ThrillSeeker : public virtual SerialKiller {};
