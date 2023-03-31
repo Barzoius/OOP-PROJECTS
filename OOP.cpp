@@ -31,6 +31,6 @@ class MissionOriented : public virtual  SerialKiller {};
 
 class Visionary : public virtual SerialKiller {};
 
-class ControlSeeker : public virtual SerialKIller {};
+class ControlSeeker : public virtual SerialKiller {};
 
 class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker {};
