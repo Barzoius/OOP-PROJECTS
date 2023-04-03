@@ -11,7 +11,7 @@ using Serial = std::integral_constant<bool, (N > 3)>;
 class SerialKiller {
 private:
   int IQ;
-  Serial count;
+  Serial<count>;
   char* Name;
   
 public:
