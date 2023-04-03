@@ -5,8 +5,8 @@
 
 // 'K' stands for killer
 
-temmplate<int N>
-using Serial = std::integral_const<bool, (N > 3)>;
+template<int N>
+using Serial = std::integral_constant<bool, (N > 3)>;
 
 class SerialKiller {
 private:
