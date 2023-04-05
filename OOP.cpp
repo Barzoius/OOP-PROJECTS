@@ -8,6 +8,8 @@
 template<int N>
 using Serial = std::integral_constant<bool, (N > 3)>;
 
+class ITF{};
+
 class SerialKiller {
 private:
   int IQ;
