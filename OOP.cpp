@@ -24,7 +24,7 @@ public:
       if (x == 1)
           std::cout << "TED";
       else
-          std::cout << "MORON";
+          std::cout << "MORON 1";
   }
   
       SerialKiller(const char* n)
