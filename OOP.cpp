@@ -20,6 +20,13 @@ public:
   
   SerialKiller(){}
   
+  SerialKiller(int x)  {
+      if (x == 1)
+          std::cout << "TED";
+      else
+          std::cout << "MORON";
+  }
+  
       SerialKiller(const char* n)
     {
         Name = new char[strlen(n) + 1];
