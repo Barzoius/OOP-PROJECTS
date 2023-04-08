@@ -36,7 +36,7 @@ public:
 
 class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
-class MissionOriented : public virtual  SerialKiller {};
+class MissionOriented : public virtual SerialKiller, public ITF {};
 
 class Visionary : public virtual SerialKiller {};
 
