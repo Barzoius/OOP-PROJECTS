@@ -66,6 +66,12 @@ public:
         Name = new char[strlen(n) + 1];
         strcpy(Name, n);
     }
+    
+    std::istream& read(std::istream&);
+    std::ostream& print(std::ostream&) const;
+
+    friend std::istream& operator >> (std::istream& in, SerialKiller& K);
+    friend std::ostream& operator << (std::ostream& out, const SerialKiller& K);
 };
 
 class ThrillSeeker : public virtual SerialKiller, public ITF {};
