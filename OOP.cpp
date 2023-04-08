@@ -40,6 +40,6 @@ class MissionOriented : public virtual SerialKiller, public ITF {};
 
 class Visionary : public virtual SerialKiller, public ITF{};
 
-class ControlSeeker : public virtual SerialKiller {};
+class ControlSeeker : public virtual SerialKiller, public ITF {};
 
-class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker {};
+class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker, public ITF {};
