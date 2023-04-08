@@ -20,12 +20,16 @@ public:
   
   SerialKiller(){}
   
-  SerialKiller(int x)  {
-      if (x == 1)
-          std::cout << "TED";
+   SerialKiller(char* name, int killcount ) : killcount(killcount) {
+
+      Name = new char[strlen(name) + 1];
+      strcpy(Name, name);
+
+      if (killcount >= 3)
+          std::cout <<  this-> Name<<" is a Serial Killer.";
       else
-          std::cout << "MORON 1";
-  }
+          std::cout <<  this -> Name<<" is not a Serial Killer.";
+   }
   
       SerialKiller(const char* n)
     {
