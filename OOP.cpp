@@ -23,7 +23,11 @@ public:
   int getKillCount() const { return this -> killcount; }
   float getIQ() const { return this -> IQ; }
   
-  SerialKiller(){}
+  SerialKiller(){
+      Name = new char[strlen("Anonim") + 1];
+      strcpy(Name, "Anonim")
+      std::cout<<getName()<<std::endl<<"Additional information required to determine whether or not this person represents a danger.";  
+  }
   
    SerialKiller(char* name, int killcount ) : killcount(killcount) {
 
