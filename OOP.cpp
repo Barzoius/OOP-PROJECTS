@@ -5,8 +5,8 @@
 
 // 'K' stands for killer
 
-/// Note that this represents th boilerplate code part
-//// There are no functionalities yet
+/// Note that this represents th boilerplate code part 
+/// There are no functionalities yet 
 
 template<int N>
 using Serial = std::integral_constant<bool, (N > 3)>;
