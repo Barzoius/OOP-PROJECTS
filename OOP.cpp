@@ -115,7 +115,6 @@ std::ostream &operator << (std::ostream& out, const SerialKiller& K){
 }
 
 
-///-----------------------------------------------------------------------------------------------------------------
 class MissionOriented : public virtual  SerialKiller {
 
 private:
