@@ -70,9 +70,39 @@ public:
 
 class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
-class MissionOriented : public virtual SerialKiller, public ITF {};
+class MissionOriented : public virtual  SerialKiller {
+
+private:
+    bool RacialMot;
+    bool ReligiousMot;
+    bool EthnicityMot;
+    bool Sadism;
+
+public:
+
+    bool getRA() const { return this -> RacialMot;}
+    bool getRE() const { return this -> ReligiousMot;}
+    bool getET() const { return this -> EthnicityMot;}
+
+    MissionOriented(char* name, int killcount, float iq, bool RA, bool RE, bool ET) :
+        SerialKiller(name, killcount, iq), RacialMot(RA), ReligiousMot(RE), EthnicityMot(ET){
+
+        if(getRA()) {std::cout<<getName()<<" has racial reasons."<<std::endl;}
+
+        if(getRE()){std::cout<<getName()<<" has religious reasons."<<std::endl;}
+
+        if(getET()){std::cout<<getName()<<" has ethnicity reasons."<<std::endl;}
+
+        if(!getRA() && !getRE() && !getET())
+        {std::cout << getName() << " doesn't have reasons associated with the MissionOriented's ones ";}
+    }
+
+
+};
 
 class Visionary : public virtual SerialKiller, public ITF{};
+
+class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
 class ControlSeeker : public virtual SerialKiller, public ITF {};
 
