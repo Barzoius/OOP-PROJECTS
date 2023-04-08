@@ -8,7 +8,13 @@
 template<int N>
 using Serial = std::integral_constant<bool, (N > 3)>;
 
-class ITF{};
+class ITF{
+
+public:
+    virtual std::ostream& print(std::ostream&) const = 0;
+    virtual std::istream& read(std::istream&) = 0;
+     
+};
 
 class SerialKiller: public ITF {
 private:
