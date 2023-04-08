@@ -10,7 +10,7 @@ using Serial = std::integral_constant<bool, (N > 3)>;
 
 class ITF{};
 
-class SerialKiller {
+class SerialKiller: public ITF {
 private:
   int IQ;
   Serial<count>;
@@ -34,7 +34,7 @@ public:
     }
 };
 
-class ThrillSeeker : public virtual SerialKiller {};
+class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
 class MissionOriented : public virtual  SerialKiller {};
 
