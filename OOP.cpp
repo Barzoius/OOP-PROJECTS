@@ -74,6 +74,32 @@ public:
     friend std::ostream& operator << (std::ostream& out, const SerialKiller& K);
 };
 
+std::istream& SerialKiller::read(std::istream& in){
+    std::cout<<"Insert the name: ";
+    in >> this ->Name;
+    std::cout<<"Insert the kill count: ";
+    in >> this -> killcount;
+    std::cout<<"Insert the IQ: ";
+    in>>this -> IQ;
+}
+
+std::istream& operator >> (std::istream& in, SerialKiller& K){
+    return K.read(in);
+}
+
+std::ostream& SerialKiller::print(std::ostream& out) const{
+
+    out<<"Name: " << this -> Name <<std::endl;
+    out<<"Kill count: " << this -> killcount<<std::endl;
+    out<<"IQ: "<< this -> IQ<<std::endl;
+
+    return out;
+}
+
+std::ostream &operator << (std::ostream& out, const SerialKiller& K){
+    return K.print(out);
+}
+
 class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
 class MissionOriented : public virtual  SerialKiller {
