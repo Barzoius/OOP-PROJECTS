@@ -18,6 +18,11 @@ private:
   
 public:
   
+  ///---GETTERS---///
+  char* getName() const { return this->Name; }
+  int getKillCount() const { return this -> killcount; }
+  float getIQ() const { return this -> IQ; }
+  
   SerialKiller(){}
   
    SerialKiller(char* name, int killcount ) : killcount(killcount) {
