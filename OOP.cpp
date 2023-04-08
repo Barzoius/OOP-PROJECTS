@@ -132,7 +132,7 @@ public:
 
 };
 
-class Visionary : public virtual SerialKiller {
+class Visionary : public virtual SerialKiller{
 
 private:
     bool Randomness;
@@ -142,6 +142,8 @@ public:
 
     bool getRandomness() const { return this -> Randomness;}
     bool getCoverUp() const { return this -> CoverUp;}
+
+    Visionary(){}
 
     Visionary(char* name, int killcount, float iq, bool rand, bool coverup) :
     SerialKiller(name, killcount, iq), Randomness(rand), CoverUp(coverup){
@@ -155,7 +157,40 @@ public:
         if(!getCoverUp() && !getRandomness())
         {std::cout<<"Based on the lack of pattern like behaviour this killer doesn't seems to fall in the Visionary category"<<std::endl;}
     }
+
+    std::istream& read(std::istream&) override;
+    std::ostream& print(std::ostream&) const override;
+
+    friend std::istream& operator >> (std::istream& in, Visionary& V);
+    friend std::ostream& operator << (std::ostream& out, const Visionary& V);
+
 };
+
+    std::istream& Visionary::read(std::istream& in){
+        SerialKiller::read(in);
+        std::cout<<"Random choice of victims: ";
+        in>>this->Randomness;
+        std::cout<<"Cover up: ";
+        in>>this->CoverUp;
+
+        return in;
+    }
+
+    std::istream& operator >> (std::istream& in, Visionary& V){
+        return V.read(in);
+    }
+
+    std::ostream& Visionary::print(std::ostream & out) const {
+        SerialKiller::print(out);
+        std::cout<<"Random choice of victims: "<<getRandomness()<<std::endl;
+        std::cout<<"Marks of a cover up: "<<getCoverUp()<<std::endl;
+
+        return out;
+    }
+
+    std::ostream& operator << (std::ostream& out, const Visionary& V){
+        return V.print(out);
+    }
 
 class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
