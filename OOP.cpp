@@ -16,7 +16,7 @@ public:
      
 };
 
-class SerialKiller: public ITF {
+class SerialKiller: public virtual ITF {
 private:
   int IQ;
   Serial<count>;
