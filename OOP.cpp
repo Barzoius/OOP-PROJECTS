@@ -132,7 +132,30 @@ public:
 
 };
 
-class Visionary : public virtual SerialKiller, public ITF{};
+class Visionary : public virtual SerialKiller {
+
+private:
+    bool Randomness;
+    bool CoverUp;
+
+public:
+
+    bool getRandomness() const { return this -> Randomness;}
+    bool getCoverUp() const { return this -> CoverUp;}
+
+    Visionary(char* name, int killcount, float iq, bool rand, bool coverup) :
+    SerialKiller(name, killcount, iq), Randomness(rand), CoverUp(coverup){
+
+        if(getRandomness()) { std::cout<<"The victims are chosen at random, often in a disorganized manner."<<std::endl;}
+        else {std::cout<<"An organized choice of victims is not usually in a Visionary's character"<<std::endl;}
+
+        if(getCoverUp()) {std::cout<<"Little to no effort to cover up crimes is usually part of a Visionary's pattern."<<std::endl;}
+        else{std::cout<<"Covering up the crime is more suited to the ControlSeeker type"<<std::endl;}
+
+        if(!getCoverUp() && !getRandomness())
+        {std::cout<<"Based on the lack of pattern like behaviour this killer doesn't seems to fall in the Visionary category"<<std::endl;}
+    }
+};
 
 class ThrillSeeker : public virtual SerialKiller, public ITF {};
 
