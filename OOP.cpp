@@ -11,11 +11,14 @@
 template<int N>
 using Serial = std::integral_constant<bool, (N > 3)>;
 
+class SerialKiller;
+
 class ITF{
 
 public:
     virtual std::ostream& print(std::ostream&) const = 0;
     virtual std::istream& read(std::istream&) = 0;
+    virtual SerialKiller& equal(const SerialKiller& K) = 0
 };
 
 class SerialKiller : public virtual ITF {
