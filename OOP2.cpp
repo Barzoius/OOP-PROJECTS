@@ -177,7 +177,7 @@ std::ostream &operator << (std::ostream& out, const SerialKiller& K){
 
 
 ///-----------------------------------------------------------------------------------------------------------------
-class MissionOriented : public virtual  SerialKiller{
+class MissionOriented : virtual public  SerialKiller{
 
 private:
     bool RacialMot;
@@ -223,6 +223,8 @@ MissionOriented& MissionOriented::EQUAL(const MissionOriented& M){
     RacialMot = M.RacialMot;
     ReligiousMot = M.ReligiousMot;
     EthnicityMot = M.EthnicityMot;
+
+    return *this;
 }
 
 MissionOriented& MissionOriented::operator=(const MissionOriented &M) {
@@ -259,7 +261,7 @@ std::ostream& operator <<(std::ostream& out, const MissionOriented& M){
     return M.print(out);
 }
 
-class Visionary : public virtual SerialKiller{
+class Visionary : virtual public SerialKiller{
 
 private:
     bool Randomness;
@@ -291,7 +293,22 @@ public:
     friend std::istream& operator >> (std::istream& in, Visionary& V);
     friend std::ostream& operator << (std::ostream& out, const Visionary& V);
 
+    Visionary& EQUAL(const Visionary& V);
+    Visionary& operator = (const Visionary& V);
+
 };
+
+Visionary& Visionary::EQUAL(const Visionary &V) {
+    SerialKiller::EQUAL(V);
+    Randomness = V.Randomness;
+    CoverUp = V.CoverUp;
+
+    return *this;
+}
+
+Visionary& Visionary::operator=(const Visionary &V) {
+    return (*this).EQUAL(V);
+}
 
     std::istream& Visionary::read(std::istream& in){
         SerialKiller::read(in);
@@ -319,7 +336,7 @@ public:
         return V.print(out);
     }
 
-class ThrillSeeker : public virtual SerialKiller {
+class ThrillSeeker : virtual public SerialKiller {
 
 private:
         bool HedonisticActs;
@@ -341,7 +358,22 @@ public:
         friend std::istream& operator >>(std::istream& in, ThrillSeeker& T);
         friend std::ostream& operator <<(std::ostream& out, const ThrillSeeker& T);
 
+        ThrillSeeker& EQUAL(const ThrillSeeker& T);
+        ThrillSeeker& operator =(const ThrillSeeker& T);
+
 };
+
+    ThrillSeeker& ThrillSeeker::EQUAL(const ThrillSeeker &T) {
+        SerialKiller::EQUAL(T);
+        HedonisticActs = T.HedonisticActs;
+
+        return *this;
+    }
+
+    ThrillSeeker& ThrillSeeker::operator=(const ThrillSeeker &T) {
+        return (*this).EQUAL(T);
+    }
+
 
     std::istream& ThrillSeeker::read(std::istream& in){
         SerialKiller::read(in);
@@ -366,7 +398,7 @@ public:
         return T.print(out);
     }
 
-class ControlSeeker : public virtual SerialKiller {
+class ControlSeeker : virtual public SerialKiller {
 
 private:
         bool Souvenirs;
@@ -390,7 +422,23 @@ public:
         friend std::istream& operator >> (std::istream& in, ControlSeeker& C);
         friend std::ostream& operator << (std::ostream& out, const ControlSeeker& C);
 
+        ControlSeeker& EQUAL(const ControlSeeker& C);
+        ControlSeeker& operator = (const ControlSeeker& C);
+
 };
+
+    ControlSeeker& ControlSeeker::EQUAL(const ControlSeeker &C) {
+        SerialKiller::EQUAL(C);
+        Souvenirs = C.Souvenirs;
+
+        return *this;
+    }
+
+    ControlSeeker& ControlSeeker::operator=(const ControlSeeker &C) {
+        return (*this).EQUAL(C);
+    }
+
+
     std::istream& ControlSeeker::read(std::istream& in){
         SerialKiller::read(in);
         std::cout<<"Does anything seems to miss, a possible souvenir: ";
@@ -414,8 +462,45 @@ public:
         return C.print(out);
     }
 
-//class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker {};
+class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker {
 
+    public:
+
+//        Hybrid(char* name, int kc, float iq, bool ra, bool re, bool et, bool rd, bool c, bool h, bool s) :
+//        MissionOriented()
+
+        std::istream& read(std::istream&) override;
+        std::ostream& print(std::ostream&) const override;
+
+        friend std::istream& operator >> (std::istream& in, Hybrid& H);
+        friend std::ostream& operator << (std::ostream& out, const Hybrid& H);
+    };
+
+    std::istream& Hybrid::read(std::istream& in){
+        ThrillSeeker::read(in);
+        MissionOriented::read(in);
+        Visionary::read(in);
+        ControlSeeker::read(in);
+
+        return in;
+    }
+
+    std::istream& operator>>(std::istream& in, Hybrid& H){
+        return H.read(in);
+    }
+
+    std::ostream& Hybrid::print(std::ostream& out) const{
+        ThrillSeeker::print(out);
+        MissionOriented::print(out);
+        Visionary::print(out);
+        ControlSeeker::print(out);
+
+        return out;
+    }
+
+    std::ostream& operator << (std::ostream& out, const Hybrid& H){
+        return H.print(out);
+    }
 
 int main() {
     //SerialKiller S("Ted", 4, 10);
@@ -451,6 +536,9 @@ int main() {
 //    M = X;
 //
 //    std::cout<<M<<std::endl;
+
+//    Hybrid H;
+//    std::cin>>H;
 
     return 0;
 }
