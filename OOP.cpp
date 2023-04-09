@@ -86,8 +86,36 @@ public:
 
     friend std::istream& operator >> (std::istream& in, SerialKiller& K);
     friend std::ostream& operator << (std::ostream& out, const SerialKiller& K);
+    
+    SerailKiller& operator = (const SerialKiller& K);
+    
+    SerialKiller& equal(const SerialKiller &K) override;
 
 };
+
+SerialKiller& SerialKiller::equal(const SerialKiller& K) {
+
+    if(this != &K)
+    {
+        if(this -> Name != nullptr)
+        {
+            delete[] Name;
+            (*this).Name = nullptr;
+        }
+        
+        this -> Name = new char[strlen(K.Name) + 1];
+        strcpy(Name, K.Name);
+        
+        killcount = K.killcount;
+        IQ = K.IQ;
+    }
+    
+    return *this;
+}
+    
+SerialKiller& SerialKiller::operator = (const SerialKiller& K){
+    return (*this).equal(K);
+}
 
 std::istream& SerialKiller::read(std::istream& in){
     std::cout<<"Insert the name: ";
