@@ -5,9 +5,6 @@
 
 // 'K' stands for killer
 
-/// Note that this represents th boilerplate code part 
-/// There are no functionalities yet 
-
 template<int N>
 using Serial = std::integral_constant<bool, (N > 3)>;
 
@@ -18,7 +15,7 @@ class ITF{
 public:
     virtual std::ostream& print(std::ostream&) const = 0;
     virtual std::istream& read(std::istream&) = 0;
-    virtual SerialKiller& equal(const SerialKiller& K) = 0
+    virtual SerialKiller& equal(const SerialKiller& K) = 0;
 };
 
 class SerialKiller : public virtual ITF {
@@ -86,15 +83,14 @@ public:
 
     friend std::istream& operator >> (std::istream& in, SerialKiller& K);
     friend std::ostream& operator << (std::ostream& out, const SerialKiller& K);
-    
-    SerailKiller& operator = (const SerialKiller& K);
-    
-    SerialKiller& equal(const SerialKiller &K) override;
+
+    SerialKiller& operator = (const SerialKiller& K);
+
+    SerialKiller& equal(const SerialKiller& K) override;
 
 };
 
-SerialKiller& SerialKiller::equal(const SerialKiller& K) {
-
+SerialKiller& SerialKiller::equal(const SerialKiller &K) {
     if(this != &K)
     {
         if(this -> Name != nullptr)
@@ -102,17 +98,19 @@ SerialKiller& SerialKiller::equal(const SerialKiller& K) {
             delete[] Name;
             (*this).Name = nullptr;
         }
-        
+
         this -> Name = new char[strlen(K.Name) + 1];
         strcpy(Name, K.Name);
-        
+
         killcount = K.killcount;
         IQ = K.IQ;
     }
-    
+
     return *this;
+
 }
-    
+
+
 SerialKiller& SerialKiller::operator = (const SerialKiller& K){
     return (*this).equal(K);
 }
@@ -146,6 +144,7 @@ std::ostream &operator << (std::ostream& out, const SerialKiller& K){
 }
 
 
+///-----------------------------------------------------------------------------------------------------------------
 class MissionOriented : public virtual  SerialKiller {
 
 private:
@@ -365,8 +364,8 @@ public:
     std::ostream& operator << (std::ostream& out, const ControlSeeker& C ){
         return C.print(out);
     }
-//class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker {};
 
+//class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, public ControlSeeker {};
 
 int main() {
     //SerialKiller S("Ted", 4, 10);
@@ -387,6 +386,14 @@ int main() {
 //    ControlSeeker C;
 //    std::cin>>C;
 //    std::cout<<C;
+
+//     SerialKiller C("DAN", 12, 21);
+//     SerialKiller B("PAN", 45, 2123);
+//     B = C;
+//     std::cout<<B;
+
+    
     return 0;
+
 }
 
