@@ -34,6 +34,9 @@ private:
   float IQ;
   std::vector<SerialKiller> WANTEDList;
 
+protected:
+  static bool DoesItReads;
+
 public:
 
   char* getName() const { return this->Name; }
@@ -100,6 +103,8 @@ public:
 
 };
 
+bool SerialKiller::DoesItReads(false);
+
 SerialKiller& SerialKiller::EQUAL(const SerialKiller &K){
 
     if(this != &K)
@@ -148,6 +153,9 @@ SerialKiller& SerialKiller::operator = (const SerialKiller& K){
 }
 
 std::istream& SerialKiller::read(std::istream& in){
+
+    DoesItReads = true;
+
     std::cout<<"Insert the name: ";
     in >> this ->Name;
     std::cout<<"Insert the kill count: ";
@@ -233,7 +241,10 @@ MissionOriented& MissionOriented::operator=(const MissionOriented &M) {
 
 
 std::istream& MissionOriented::read(std::istream& in) {
-    SerialKiller::read(in);
+
+    if(!DoesItReads){
+        SerialKiller::read(in);
+    }
     std::cout<<"Racial Motivations: ";
     in>>this->RacialMot;
     std::cout<<"Religious Motivations: ";
@@ -466,8 +477,15 @@ class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, pu
 
     public:
 
-//        Hybrid(char* name, int kc, float iq, bool ra, bool re, bool et, bool rd, bool c, bool h, bool s) :
-//        MissionOriented()
+        Hybrid(){std::cout<<"DEFAULT";}
+
+        Hybrid(char* name, int kc, float iq, bool ra, bool re, bool et, bool rd, bool c, bool h, bool s) :
+        SerialKiller(name, kc, iq),
+        MissionOriented(name, kc, iq, ra, re, et),
+        ThrillSeeker(name, kc, iq,  h),
+        Visionary(name, kc, iq, rd, c),
+        ControlSeeker(name, kc, iq, s)
+        { std::cout<<"HYBRID";}
 
         std::istream& read(std::istream&) override;
         std::ostream& print(std::ostream&) const override;
@@ -490,6 +508,7 @@ class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, pu
     }
 
     std::ostream& Hybrid::print(std::ostream& out) const{
+
         ThrillSeeker::print(out);
         MissionOriented::print(out);
         Visionary::print(out);
@@ -537,8 +556,11 @@ int main() {
 //
 //    std::cout<<M<<std::endl;
 
-//    Hybrid H;
-//    std::cin>>H;
+    Hybrid H;
+    std::cout<<std::endl;
+    std::cin>>H;
+
+   // Hybrid("DAN", 12, 230, false, true, false, false, true, false, true);
 
     return 0;
 }
