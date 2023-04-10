@@ -35,7 +35,7 @@ private:
   std::vector<SerialKiller> WANTEDList;
 
 protected:
-  static bool DoesItReads;
+    bool DoesItReads;
 
 public:
 
@@ -103,7 +103,7 @@ public:
 
 };
 
-bool SerialKiller::DoesItReads(false);
+//bool SerialKiller::DoesItReads(false);
 
 SerialKiller& SerialKiller::EQUAL(const SerialKiller &K){
 
@@ -322,7 +322,9 @@ Visionary& Visionary::operator=(const Visionary &V) {
 }
 
     std::istream& Visionary::read(std::istream& in){
-        SerialKiller::read(in);
+        if(!DoesItReads){
+            SerialKiller::read(in);
+        }
         std::cout<<"Random choice of victims: ";
         in>>this->Randomness;
         std::cout<<"Cover up: ";
@@ -387,7 +389,9 @@ public:
 
 
     std::istream& ThrillSeeker::read(std::istream& in){
-        SerialKiller::read(in);
+        if(!DoesItReads){
+            SerialKiller::read(in);
+        }
         std::cout<<"Are any hedonistic acts present: ";
         in>>this -> HedonisticActs;
 
@@ -451,7 +455,9 @@ public:
 
 
     std::istream& ControlSeeker::read(std::istream& in){
-        SerialKiller::read(in);
+        if(!DoesItReads){
+            SerialKiller::read(in);
+        }
         std::cout<<"Does anything seems to miss, a possible souvenir: ";
         in >> this ->Souvenirs;
 
@@ -499,7 +505,7 @@ class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, pu
         MissionOriented::read(in);
         Visionary::read(in);
         ControlSeeker::read(in);
-
+        DoesItReads = false;
         return in;
     }
 
@@ -556,9 +562,20 @@ int main() {
 //
 //    std::cout<<M<<std::endl;
 
-    Hybrid H;
-    std::cout<<std::endl;
-    std::cin>>H;
+//    Hybrid H;
+//    std::cout<<std::endl;
+//    std::cin>>H;
+//
+//     Hybrid W;
+//     std::cout<<std::endl;
+//     std::cin>>W;
+
+//    ThrillSeeker D;
+//    MissionOriented M;
+//
+//    std::cin>>D;
+//    std::cout<<std::endl;
+//    std::cin>>M;
 
    // Hybrid("DAN", 12, 230, false, true, false, false, true, false, true);
 
