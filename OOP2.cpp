@@ -126,7 +126,6 @@ SerialKiller& SerialKiller::EQUAL(const SerialKiller &K){
 
 }
 
-
 //SerialKiller& SerialKiller::equal(const SerialKiller &K) {
 //
 //    if(this != &K)
