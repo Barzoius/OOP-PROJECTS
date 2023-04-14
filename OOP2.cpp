@@ -32,7 +32,7 @@ private:
   char* Name;
   int killcount;
   float IQ;
-  std::vector<SerialKiller> WANTEDList;
+  const std::string Type;
 
 protected:
     bool DoesItReads;
