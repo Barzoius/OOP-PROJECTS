@@ -526,6 +526,31 @@ class Hybrid : public ThrillSeeker, public MissionOriented, public Visionary, pu
         return H.print(out);
     }
 
+class WantedList{
+
+    private:
+        std::list<SerialKiller*> wantedList;
+
+    public:
+
+        WantedList(){ this -> wantedList = {};}
+
+        void addWanted(SerialKiller* K);
+        void printWanted();
+        //void removeWanted(SerialKiller* K);
+    };
+
+void WantedList::addWanted(SerialKiller *K) {
+    wantedList.push_back(K);
+}
+
+void WantedList::printWanted() {
+    for(auto K : wantedList){
+        std::cout<<"Name: "<<K -> getName()<<std::endl;
+        //std::cout<<"Is a "<< typeid(*K).name()<<std::endl;
+    }
+}
+
 int main() {
     //SerialKiller S("Ted", 4, 10);
 
