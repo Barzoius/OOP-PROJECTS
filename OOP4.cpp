@@ -5,6 +5,8 @@
 #include <list>
 // 'K' stands for killer
 
+///------There is a mistake in the printWanted function and in the way its working in the intercative menu------///
+
 template<int N>
 using Serial = std::integral_constant<bool, (N > 3)>;
 
