@@ -778,6 +778,41 @@ void WantedList::delloc() {
     }
 }
 
+struct KILLER{
+
+    static std::unique_ptr<SerialKiller> CREATE(const std::string& killertype)
+    {
+        if(killertype == "Plane serial killer")
+        {
+            return std::make_unique<SerialKiller>(false);
+        }
+        else if(killertype == "MissionOriented")
+        {
+            return std::make_unique<MissionOriented>(false);
+        }
+        else if(killertype == "Visionary")
+        {
+            return std::make_unique<Visionary>(false);
+        }
+        else if(killertype == "ThrillSeeker")
+        {
+            return std::make_unique<ThrillSeeker>(false);
+        }
+        else if(killertype == "ControlSeeker")
+        {
+            return std::make_unique<ControlSeeker>(false);
+        }
+        else if(killertype == "Hybrid")
+        {
+            return std::make_unique<Hybrid>(false);
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+};
+
 
 void Menu(){
     int k = 1;
