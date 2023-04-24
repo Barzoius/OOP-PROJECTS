@@ -3,6 +3,7 @@
 #include <type_traits>
 #include <list>
 #include <cxxabi.h>
+#include <memory>
 
 // 'K' stands for killer
 
