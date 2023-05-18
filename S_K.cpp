@@ -1,465 +1,1008 @@
 #include <iostream>
-#include <fstream>
 #include <cstring>
+#include <list>
 #include <cxxabi.h>
+#include <memory>
 #include <limits>
 
-///-------------------------------(ENUMS)-------------------------------///
-enum class Water_Species {Squirtle, Blastoise, Seel, Horsea, Vaporeon};
-enum class Fire_Species { Charmander, Magmar, Tepig, Litten, Raboot};
-enum class Steel_Species { Klink, Klang, Meltan, Melmetal};
-enum class Electric_Species { Pikachu,  Raichu,  Manectric, Electivire};
-///---------------------------------------------------------------------///
 
-template <class P>
-struct ITF{
+// 'K' stands for killer
+
+
+template<typename T>
+class ITF{
+
+public:
+
     virtual std::ostream& print(std::ostream&) const = 0;
     virtual std::istream& read(std::istream&) = 0;
+    //virtual SerialKiller& equal(const SerialKiller& K) = 0;
+
+    virtual  T& EQUAL(const T& K) = 0;
+
 };
 
-class POKEMON : public virtual ITF<POKEMON>{
+enum class Sex { male, female, unknown};
+
+class SerialKiller : public virtual ITF<SerialKiller> {
+
 
 private:
-    char* Name;
-    int HP;
-    float WEIGHT;
-    float CP;
+    Sex sex;
+  char* Name;
+  int killcount;
+  float IQ;
+  //std::string Nationality;
+  const char* Type;
+
+protected:
+    bool DoesItReads;
+    mutable bool DoesItPrints;
 
 public:
 
-    POKEMON(char* N, int HP, float W, float CP) : HP(HP), WEIGHT(W), CP(CP)
+  char* getName() const { return this->Name; }
+  int getKillCount() const { return this -> killcount; }
+  float getIQ() const { return this -> IQ; }
+  Sex getSex() const { return this -> sex; }
+ // const char* getType() const { return this-> SType;}
+
+  const char* getType() const{
+
+      int status;
+      char* demangledName = abi::__cxa_demangle(typeid(*this).name(), nullptr, nullptr, &status);
+      if(status == 0){
+          const char* typeName = demangledName;
+          return typeName;
+      }else {
+          return typeid(*this).name();
+      }
+  }
+
+  void SetReads(bool reads)
+  {
+      this -> DoesItReads =reads;
+  }
+
+  SerialKiller(char* name, int killcount ) : killcount(killcount), IQ(0), Type(getType()) {
+
+      Name = new char[strlen(name) + 1];
+      strcpy(Name, name);
+
+      if (getKillCount() >= 3)
+          std::cout <<  this-> getName()<<" is a Serial Killer."<<std::endl;
+      else
+          std::cout <<  this -> getName()<<" is not a Serial Killer."<<std::endl;
+
+  }
+
+  SerialKiller(char* name, int killcount, float iq, Sex sex ) :killcount(killcount), IQ(iq), sex(sex) {
+
+      Name = new char[strlen(name) + 1];
+      strcpy(Name, name);
+
+      if(getKillCount() >= 3)
+          if(getIQ() >= 150)
+              std::cout << getName() <<" is a SerialKiller with an IQ of at least 150 making him a possible fit for the MissionOriented or Visionary type"<<std::endl;
+          else
+              {std::cout<< getName() <<" is a SerialKiller with an IQ under 150 so probably a ThrillSeeker or a ControlSeeker type."<<std::endl;}
+      else
+          std::cout<< getName() << " is not a Serial Killer."<<std::endl;
+
+  }
+
+///-------------DEFAULT CONSTRUCTOR-------------///
+
+  SerialKiller()
+  {
+      Name = new char[strlen("Anonim") + 1];
+      strcpy(Name, "Anonim");
+      killcount = 0;
+      IQ = 0;
+      sex = Sex::unknown;
+      std::cout<<"Name: "<<getName()<<std::endl;
+      std::cout<<"Kill count: unspecified"<<std::endl;
+      std::cout<<"IQ: unknown"<<std::endl;
+      std::cout<<"Sex: " << static_cast<int>(Sex::unknown)<<std::endl;
+      std::cout<<"Type: impossible to determine"<<std::endl;
+      std::cout<<"Additional information required to determine whether or not this person represents a danger."<<std::endl;
+
+  }
+
+    SerialKiller(bool silent) {
+        Name = new char[strlen("Anonim") + 1];
+        strcpy(Name, "Anonim");
+        killcount = 0;
+        IQ = 0;
+        sex = Sex::unknown;
+    }
+
+
+      SerialKiller(const char* n)
     {
-        Name = new char[strlen(N) + 1];
-        strcpy(Name, N);
+        Name = new char[strlen(n) + 1];
+        strcpy(Name, n);
     }
 
-    virtual ~POKEMON()
+    virtual ~SerialKiller()
     {
-        if(Name == nullptr)
-            delete[] Name;
+      //std::cout<<"DESTRUCTOR";
+      if(Name == nullptr)
+          delete[] Name;
     }
 
-    POKEMON(const POKEMON& P) : HP(P.HP), WEIGHT(P.WEIGHT), CP(P.CP) {
-        Name = new char[strlen(P.Name) + 1];
-        strcpy(Name, P.Name);
+    SerialKiller(const SerialKiller& K):
+        killcount(K.killcount),
+        IQ(K.IQ),
+        sex(K.sex)
+    {
+      Name = new char[strlen(K.Name) + 1];
+        strcpy(Name, K.Name);
     }
 
-    char* getName() const { return Name; }
 
-    void SETCP(float cp){ CP = cp; };
+    SerialKiller(int x){}
 
-    float getCP() const {
-        return CP;
-    }
-
-    const char* getType() const{
-
-        int status;
-        char* demangledName = abi::__cxa_demangle(typeid(*this).name(), nullptr, nullptr, &status);
-        if(status == 0){
-            const char* typeName = demangledName;
-            return typeName;
-        }else{
-            return typeid(*this).name();
-        }
-    }
-
-    std::ostream& print(std::ostream&) const override;
     std::istream& read(std::istream&) override;
+    std::ostream& print(std::ostream&) const override;
 
-    friend std::ostream& operator << (std::ostream& out, const POKEMON& P);
-    friend std::istream& operator >> (std::istream& in, POKEMON& P);
+    friend std::istream& operator >> (std::istream& in, SerialKiller& K);
+    friend std::ostream& operator << (std::ostream& out, const SerialKiller& K);
+
+    SerialKiller& operator = (const SerialKiller& K);
+
+    //SerialKiller& equal(const SerialKiller& K) override;
+
+    SerialKiller& EQUAL(const SerialKiller& K) override;
 
 };
 
-std::ostream& POKEMON::print(std::ostream& out) const {
+//bool SerialKiller::DoesItReads(false);
 
-    out<<"Name: " << this->Name << std::endl;
-    out<<"STATS: " << std::endl;
-    out<<"-HP = " << this->HP << std::endl;
-    out<<"-WEIGHT = " << this->WEIGHT << std::endl;
-    out<<"-CP = " << this ->CP << std::endl;
-    return out;
-}
+SerialKiller& SerialKiller::EQUAL(const SerialKiller &K){
 
-std::ostream& operator<<(std::ostream& out, const POKEMON& P){
-    return P.print(out);
-}
-
-std::istream& POKEMON::read(std::istream& in){
-    std::cout<<"Remember, a pokemon is a real friend so chose an appropriate name!"<<std::endl;
-    std::cout<<"Chose a name: "<<std::endl;
-    in >> this -> Name;
-    std::cout<<"Insert the Hit Points(HP): "<<std::endl;
-    in >> this -> HP;
-    std::cout<<"Insert the weight of the pokemon: "<<std::endl;
-    in >> this -> WEIGHT;
-    std::cout<<"Insert the Combat Power(CP) of your pokemon: " << std::endl;
-    in >> this -> CP;
-
-    return in;
-}
-
-std::istream& operator >> (std::istream& in, POKEMON& P){
-    return P.read(in);
-}
-
-///-------------------------------------------(WATER)-------------------------------------------///
-
-class WATER_TYPE : virtual public POKEMON{
-
-private:
-
-    Water_Species WS;
-
-public:
-    WATER_TYPE(char* N, int HP, float W, float CP, Water_Species Wt) : POKEMON(N, HP, W, CP), WS(Wt)
-    { std::cout<<"WATHA."<<std::endl;}
-
-    WATER_TYPE(const WATER_TYPE& W) : POKEMON(W), WS(W.WS){}
-
-    virtual ~WATER_TYPE()
+    if(this != &K)
     {
-        if(POKEMON::getName() == nullptr)
+        if(this -> Name != nullptr)
         {
-            delete[] getName();
+            delete[] Name;
+            (*this).Name = nullptr;
         }
+
+        this -> Name = new char[strlen(K.Name) + 1];
+        strcpy(Name, K.Name);
+
+        killcount = K.killcount;
+        IQ = K.IQ;
+        sex = K.sex;
     }
 
-    Water_Species getSpecies() const {
-        return WS;
-    };
+    return *this;
 
-    void operator + (WATER_TYPE& other)  {
-
-        if(this -> WS == other.WS) {
-            float W1 = this->getCP();
-            float AddedCP = other.getCP() + W1;
-            if (AddedCP >= 1500) {
-                this->SETCP(1500);
-                other.SETCP(AddedCP - 1500);
-            } else {
-                this->SETCP(AddedCP);
-                other.SETCP(0);
-            }
-        } else std::cout<<"IUCANT"<<std::endl;
-    }
-
-    static std::string WaterSpeciesToString(Water_Species species) {
-    switch (species) {
-        case Water_Species::Squirtle:
-            return "Squirtle";
-        case Water_Species::Blastoise:
-            return "Blastoise";
-        case Water_Species::Seel:
-            return "Seel";
-        case Water_Species::Horsea:
-            return "Horsea";
-        case Water_Species::Vaporeon:
-            return "Vaporeon";
-        default:
-            return "Unknown";
-    }
 }
 
+//SerialKiller& SerialKiller::equal(const SerialKiller &K) {
+//
+//    if(this != &K)
+//    {
+//        if(this -> Name != nullptr)
+//        {
+//            delete[] Name;
+//            (*this).Name = nullptr;
+//        }
+//
+//        this -> Name = new char[strlen(K.Name) + 1];
+//        strcpy(Name, K.Name);
+//
+//        killcount = K.killcount;
+//        IQ = K.IQ;
+//    }
+//
+//    return *this;
+//
+//}
 
-    std::istream& read(std::istream& in) override;
-    std::ostream& print(std::ostream& out) const override;
+SerialKiller& SerialKiller::operator = (const SerialKiller& K){
+    return (*this).EQUAL(K);
+}
 
-    friend std::istream& operator >> (std::istream& in, WATER_TYPE& W);
-    friend std::ostream& operator << (std::ostream& out, const WATER_TYPE& W);
+std::istream& SerialKiller::read(std::istream& in){
 
-};
+    DoesItReads = true;
 
-std::istream& WATER_TYPE::read(std::istream &in) {
+    std::cout<<"Insert the name: ";
+    in >> this ->Name;
+    std::cout<<"Insert the kill count: ";
+    in >> this -> killcount;
+    std::cout<<"Insert the IQ: ";
+    in>>this -> IQ;
 
-    POKEMON::read(in);
-    bool valid_input = false;
     std::string input;
+    bool valid_input = false;
 
-    while(!valid_input){
-        std::cout<<"Insert the species: " <<std::endl;
+    while(!valid_input) {
+        std::cout << "Insert the sex: ";
         in >> input;
-
-        if(input == "Squirtle"){
-            WS = Water_Species::Squirtle;
+        if (input == "male" || input == "Male") {
+            sex = Sex::male;
             valid_input = true;
-        }
-        else if(input == "Blastoise"){
-            WS = Water_Species::Blastoise;
+        } else if (input == "female" || input == "Female") {
+            sex = Sex::female;
             valid_input = true;
-        }
-        else if(input == "Seel"){
-            WS = Water_Species::Seel;
+        } else if (input == "unknown" || input == "Unknown") {
+            sex = Sex::unknown;
             valid_input = true;
-        }
-        else if(input == "Horsea"){
-            WS = Water_Species::Horsea;
-            valid_input = true;
-        }
-        else if(input == "Vaporeon"){
-            WS = Water_Species::Vaporeon;
-            valid_input = true;
-        }
-        else
+        } else {
+            // Handle invalid input
             std::cerr
-                    << "Invalid input. Please try a valid water species"
+                    << "Invalid input. Please try again and input a viable response(male/Male or female/Female or unknown/Unknown)."
                     << std::endl
                     <<"Please insert a valid information for this field: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            //exit(1);
+        }
     }
 
     return in;
 }
 
-std::istream& operator >> (std::istream& in, WATER_TYPE& W){
-    return W.read(in);
+std::istream& operator >> (std::istream& in, SerialKiller& K){
+    return K.read(in);
 }
 
-std::ostream& WATER_TYPE::print(std::ostream &out) const {
-    POKEMON::print(out);
-    out<<"Species: ";
-    switch (WATER_TYPE::WS) {
-        case Water_Species::Squirtle:
-            out << "Squirtle";
+//bool SerialKiller::DoesItPrints = false;
+
+std::ostream& SerialKiller::print(std::ostream& out) const{
+
+    DoesItPrints = true;
+
+    out<<"Name: " << this -> Name <<std::endl;
+    out<<"Kill count: " << this -> killcount<<std::endl;
+    out<<"IQ: "<< this -> IQ<<std::endl;
+    out<<"Sex: ";
+    switch (SerialKiller::sex) {
+        case Sex::male:
+            out << "male";
             break;
-        case Water_Species::Blastoise:
-            out << "Blastoise";
+        case Sex::female:
+            out << "female";
             break;
-        case Water_Species::Seel:
-            out << "Seel";
-            break;
-        case Water_Species::Horsea:
-            out << "Horsea";
-            break;
-        case Water_Species::Vaporeon:
-            out << "Vaporeon";
+        case Sex::unknown:
+            out << "unknown";
             break;
     }
     out<<std::endl;
-
+    out<<"Type: "<<getType()<<std::endl;
+    out<<std::endl;
     return out;
 }
 
-std::ostream& operator << (std::ostream& out, const WATER_TYPE& W){
-    return W.print(out);
+std::ostream &operator << (std::ostream& out, const SerialKiller& K){
+    return K.print(out);
 }
 
-///-------------------------------------------(STEEL)-------------------------------------------///
+///-------------------------------------------------(DERIVED CLASSES)----------------------------------------------------------------///
 
-class STEEL_TYPE : virtual public POKEMON{
+class MissionOriented : virtual public SerialKiller{
+
 private:
-
-    //const char* Weakness = "Fire_Type";
-    Steel_Species SS;
+    bool RacialMot;
+    bool ReligiousMot;
+    bool EthnicityMot;
 
 public:
-    STEEL_TYPE(char* N, int HP, float W, float CP, Steel_Species ss) : POKEMON(N, HP, W, CP), SS(ss){std::cout<<"STEEL."<<std::endl;}
 
-    STEEL_TYPE(const STEEL_TYPE& S) : POKEMON(S), SS(S.SS){}
+    bool getRA() const { return this -> RacialMot;}
+    bool getRE() const { return this -> ReligiousMot;}
+    bool getET() const { return this -> EthnicityMot;}
 
-    virtual ~STEEL_TYPE()
+    MissionOriented():SerialKiller(){}
+
+    MissionOriented(char* name, int killcount, float iq, Sex sex, bool RA, bool RE, bool ET) :
+        SerialKiller(name, killcount, iq, sex), RacialMot(RA), ReligiousMot(RE), EthnicityMot(ET){
+
+        if(getRA()) {std::cout<<getName()<<" has racial reasons."<<std::endl;}
+
+        if(getRE()){std::cout<<getName()<<" has religious reasons."<<std::endl;}
+
+        if(getET()){std::cout<<getName()<<" has ethnicity reasons."<<std::endl;}
+
+        if(!getRA() && !getRE() && !getET())
+        {std::cout << getName() << " doesn't have reasons associated with the MissionOriented's ones ";}
+    }
+
+    MissionOriented(const MissionOriented& M) :
+    SerialKiller(M),
+    RacialMot(M.RacialMot),
+    ReligiousMot(M.ReligiousMot),
+    EthnicityMot(M.EthnicityMot)
     {
-        if(POKEMON::getName() == nullptr)
+
+    }
+
+    MissionOriented(bool silent) : SerialKiller(silent), RacialMot(false), ReligiousMot(false), EthnicityMot(false){}
+
+    virtual ~MissionOriented()
+    {
+        if(SerialKiller::getName() == nullptr)
         {
             delete[] getName();
         }
     }
 
-   static std::string SteelSpeciesToString(Steel_Species species) {
-    switch (species) {
-        case Steel_Species::Klink:
-            return "Klink";
-        case Steel_Species::Klang:
-            return "Klang";
-        case Steel_Species::Meltan:
-            return "Meltan";
-        case Steel_Species::Melmetal:
-            return "Melmetal";
-        default:
-            return "Unknown";
-    }
-}
-
-    std::istream& read(std::istream& in) override;
-    std::ostream& print(std::ostream& out) const override;
-
-    friend std::istream& operator >> (std::istream& in, STEEL_TYPE& S);
-    friend std::ostream& operator << (std::ostream& out, const STEEL_TYPE& S);
-
-};
-
-std::istream& STEEL_TYPE::read(std::istream &in) {
-    POKEMON::read(in);
-    bool valid_input = false;
-    std::string input;
-
-    while(!valid_input){
-        std::cout<<"Insert the species: " <<std::endl;
-        in >> input;
-
-        if(input == "Klink"){
-            SS = Steel_Species::Klink;
-            valid_input = true;
-        }
-        else if(input == "Klang"){
-            SS = Steel_Species::Klang;
-            valid_input = true;
-        }
-        else if(input == "Meltan"){
-            SS = Steel_Species::Meltan;
-            valid_input = true;
-        }
-        else if(input == "Melmetal"){
-            SS = Steel_Species::Melmetal;
-            valid_input = true;
-        }
-        else
-            std::cerr
-                << "Invalid input. Please try a valid steel species"
-                << std::endl
-                <<"Please insert a valid information for this field: ";
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-
-    return in;
-}
-
-std::istream& operator >> (std::istream& in, STEEL_TYPE& S){
-    return S.read(in);
-}
-
-std::ostream& STEEL_TYPE::print(std::ostream &out) const {
-    POKEMON::print(out);
-    out<<"Species: ";
-    switch (STEEL_TYPE::SS) {
-        case Steel_Species::Klink:
-            out << "Klink";
-            break;
-        case Steel_Species::Klang:
-            out << "Klang";
-            break;
-        case Steel_Species::Meltan:
-            out << "Meltan";
-            break;
-        case Steel_Species::Melmetal:
-            out << "Melmetal";
-            break;
-    }
-    out<<std::endl;
-
-    return out;
-}
-
-std::ostream& operator << (std::ostream& out, const STEEL_TYPE& S){
-    return S.print(out);
-}
-
-///-------------------------------------------(WATER_STEEL)-------------------------------------------///
-
-class WATER_STEEL_TYPE : public WATER_TYPE, public STEEL_TYPE{
-
-private:
-    std::string WaterSteelSpecies;
-public:
-    WATER_STEEL_TYPE(char* N, int HP, float W, float CP, Water_Species WS, Steel_Species SS) :
-            POKEMON(N, HP, W, CP),
-            WATER_TYPE(N, HP, W, CP, WS),
-            STEEL_TYPE(N, HP, W, CP, SS)
-    {
-        std::string waterString = WaterSpeciesToString(WS);
-        std::string steelString = SteelSpeciesToString(SS);
-        WaterSteelSpecies = waterString.substr(0, waterString.size() / 2) +
-                                      steelString.substr(steelString.size() / 2);
-    }
-
-    std::string GetSpecies() const {
-        return WaterSteelSpecies;
-    }
 
     std::istream& read(std::istream&) override;
     std::ostream& print(std::ostream&) const override;
 
-    friend std::istream& operator >> (std::istream& in, WATER_STEEL_TYPE& WS);
-    friend std::ostream& operator << (std::ostream& out, const WATER_STEEL_TYPE& WS);
+    friend std::istream& operator >>(std::istream& in, MissionOriented& M);
+    friend std::ostream& operator <<(std::ostream& out, const MissionOriented& M);
+
+    //SerialKiller& equal(const SerialKiller& K) override;
+    MissionOriented& EQUAL(const MissionOriented& M);
+
+    MissionOriented &operator=(const MissionOriented &M);
+
 };
 
-std::istream& WATER_STEEL_TYPE::read(std::istream& in){
-    WATER_TYPE::read(in);
+MissionOriented& MissionOriented::EQUAL(const MissionOriented& M){
+    SerialKiller::EQUAL(M);
+    RacialMot = M.RacialMot;
+    ReligiousMot = M.ReligiousMot;
+    EthnicityMot = M.EthnicityMot;
+
+    return *this;
+}
+
+MissionOriented& MissionOriented::operator=(const MissionOriented &M) {
+    return (*this).EQUAL(M);
+}
+
+
+std::istream& MissionOriented::read(std::istream& in) {
+
+    if(!DoesItReads){
+        SerialKiller::read(in);
+    }
+    std::cout<<"Racial Motivations: ";
+    in>>this->RacialMot;
+    std::cout<<"Religious Motivations: ";
+    in>>this->ReligiousMot;
+    std::cout<<"Ethnicity Motivations: ";
+    in>>this->EthnicityMot;
+
     return in;
 }
 
-std::istream& operator >> (std::istream& in, WATER_STEEL_TYPE& WS){
-    return WS.read(in);
+std::istream& operator >>(std::istream& in, MissionOriented& M){
+    return M.read(in);
 }
 
-std::ostream& WATER_STEEL_TYPE::print(std::ostream& out) const{
-    WATER_TYPE::print(out);
+std::ostream& MissionOriented::print(std::ostream& out) const{
+    if(!DoesItPrints){
+        SerialKiller::print(out);
+    }
+    out<<"Racial motivations: " <<(!getRA() ? "NO" : "YES")<<std::endl;
+    out<<"Religious motivations: "<<(!getRE() ? "NO" : "YES")<<std::endl;
+    out<<"Ethnicity motivations: "<<(!getET() ? "NO" : "YES")<<std::endl;
+
     return out;
 }
 
-std::ostream& operator << (std::ostream& out, const WATER_STEEL_TYPE& WS){
-    return WS.print(out);
+std::ostream& operator <<(std::ostream& out, const MissionOriented& M){
+    return M.print(out);
 }
 
+class Visionary : virtual public SerialKiller{
 
-class FIRE_TYPE{};
-class ELECTRIC_TYPE{};
-class FIRE_ELECTRIC_TYPE : public FIRE_TYPE, public ELECTRIC_TYPE{};
+private:
+    bool Randomness;
+    bool CoverUp;
 
-//template <class W, class S>
-//class MORF : public WATER_STEEL_TYPE, public FIRE_ELECTRIC_TYPE{
-//
-//    MORF(char* N, int HP, float WA, float CP) : POKEMON(N, HP, WA, CP){}
-//
-//    MORF& morfing(W&, S&){
-//
-//    }
-//};
+public:
+
+    bool getRandomness() const { return this -> Randomness;}
+    bool getCoverUp() const { return this -> CoverUp;}
+
+    Visionary():SerialKiller(){}
+
+    Visionary(char* name, int killcount, float iq, Sex sex, bool rand, bool coverup) :
+    SerialKiller(name, killcount, iq, sex), Randomness(rand), CoverUp(coverup){
+
+        if(getRandomness()) { std::cout<<"The victims are chosen at random, often in a disorganized manner."<<std::endl;}
+        else {std::cout<<"An organized choice of victims is not usually in a Visionary's character"<<std::endl;}
+
+        if(getCoverUp()) {std::cout<<"Little to no effort to cover up crimes is usually part of a Visionary's pattern."<<std::endl;}
+        else{std::cout<<"Covering up the crime is more suited to the ControlSeeker type"<<std::endl;}
+
+        if(!getCoverUp() && !getRandomness())
+        {std::cout<<"Based on the lack of pattern like behaviour this killer doesn't seems to fall in the Visionary category"<<std::endl;}
+    }
+
+    Visionary(const Visionary& V) :
+        SerialKiller(V),
+        Randomness(V.Randomness),
+        CoverUp(V.CoverUp)
+    {
+
+    }
+    Visionary(bool silent) : SerialKiller(silent){}
+
+    virtual ~Visionary(){
+        if(SerialKiller::getName() == nullptr){
+            delete getName();
+        }
+    }
 
 
+    std::istream& read(std::istream&) override;
+    std::ostream& print(std::ostream&) const override;
+
+    friend std::istream& operator >> (std::istream& in, Visionary& V);
+    friend std::ostream& operator << (std::ostream& out, const Visionary& V);
+
+    Visionary& EQUAL(const Visionary& V);
+    Visionary& operator = (const Visionary& V);
+
+};
+
+Visionary& Visionary::EQUAL(const Visionary &V) {
+    SerialKiller::EQUAL(V);
+    Randomness = V.Randomness;
+    CoverUp = V.CoverUp;
+
+    return *this;
+}
+
+Visionary& Visionary::operator=(const Visionary &V) {
+    return (*this).EQUAL(V);
+}
+
+    std::istream& Visionary::read(std::istream& in){
+        if(!DoesItReads){
+            SerialKiller::read(in);
+        }
+        std::cout<<"Random choice of victims: ";
+        in>>this->Randomness;
+        std::cout<<"Cover up: ";
+        in>>this->CoverUp;
+
+        return in;
+    }
+
+    std::istream& operator >> (std::istream& in, Visionary& V){
+        return V.read(in);
+    }
+
+    std::ostream& Visionary::print(std::ostream & out) const {
+        if(!DoesItPrints){
+            SerialKiller::print(out);
+        }
+        std::cout<<"Random choice of victims: "<<(!getRandomness() ? "NO" : "YES")<<std::endl;
+        std::cout << "Marks of a cover up: " << (!getCoverUp() ? "NO" : "YES") << std::endl;
+
+        return out;
+    }
+
+    std::ostream& operator << (std::ostream& out, const Visionary& V){
+        return V.print(out);
+    }
+
+class ThrillSeeker : virtual public SerialKiller {
+
+private:
+        bool HedonisticActs;
+
+public:
+
+        bool getH() const {return this -> HedonisticActs;}
+
+        ThrillSeeker():SerialKiller(){}
+
+        ThrillSeeker(char* name, int killcount, float IQ, Sex sex, bool H) : SerialKiller(name, killcount, IQ, sex), HedonisticActs(H){
+            if(getH()) {std::cout<<"Hedonistic acts are common in ThrillSeekers.";}
+            else {std::cout<<"The absence of hedonistic acts strongly implies that we are not dealing with a ThrillSeeker";}
+        }
+
+        ThrillSeeker(const ThrillSeeker& T):
+            SerialKiller(T),
+            HedonisticActs(T.HedonisticActs)
+        {
+
+        }
+
+    ThrillSeeker(bool silent) : SerialKiller(silent){}
+
+    virtual ~ThrillSeeker(){
+        if(SerialKiller::getName() == nullptr){
+            delete getName();
+        }
+    }
 
 
+        std::istream& read(std::istream&) override;
+        std::ostream& print(std::ostream&) const override;
+
+        friend std::istream& operator >>(std::istream& in, ThrillSeeker& T);
+        friend std::ostream& operator <<(std::ostream& out, const ThrillSeeker& T);
+
+        ThrillSeeker& EQUAL(const ThrillSeeker& T);
+        ThrillSeeker& operator =(const ThrillSeeker& T);
+
+};
+
+    ThrillSeeker& ThrillSeeker::EQUAL(const ThrillSeeker &T) {
+        SerialKiller::EQUAL(T);
+        HedonisticActs = T.HedonisticActs;
+
+        return *this;
+    }
+
+    ThrillSeeker& ThrillSeeker::operator=(const ThrillSeeker &T) {
+        return (*this).EQUAL(T);
+    }
+
+
+    std::istream& ThrillSeeker::read(std::istream& in){
+        if(!DoesItReads){
+            SerialKiller::read(in);
+        }
+        std::cout<<"Are any hedonistic acts present: ";
+        in>>this -> HedonisticActs;
+
+        return in;
+    }
+
+    std::istream& operator >> (std::istream& in, ThrillSeeker& T){
+        return T.read(in);
+    }
+
+    std::ostream& ThrillSeeker::print(std::ostream& out) const{
+
+        if(!DoesItPrints){
+            SerialKiller::print(out);
+        }
+        out<<"Are any hedonistic acts present: "<<(!getH() ? "NO" : "YES")<<std::endl;
+
+        return out;
+    }
+
+    std::ostream& operator << (std::ostream& out, const ThrillSeeker& T){
+        return T.print(out);
+    }
+
+class ControlSeeker : virtual public SerialKiller {
+
+private:
+        bool Souvenirs;
+
+public:
+
+        bool getS() const { return this -> Souvenirs; }
+
+        ControlSeeker():SerialKiller(){};
+
+        ControlSeeker(char* name, int killcount, float iq, Sex sex, bool S) :
+        SerialKiller(name, killcount, iq, sex), Souvenirs(S){
+
+            if(getS()){std::cout<<"Taking souvenirs is highly present in ControlSeekers."<<std::endl;}
+            else{std::cout<<"Note that a souvenir might be something we wouldn't consider important so keep searching."<<std::endl;}
+        }
+
+        ControlSeeker(const ControlSeeker& C):
+            SerialKiller(C),
+            Souvenirs(C.Souvenirs)
+        {
+
+        }
+
+    ControlSeeker(bool silent) : SerialKiller(silent){}
+
+    virtual ~ControlSeeker(){
+        if(SerialKiller::getName() == nullptr){
+            delete getName();
+        }
+    }
+
+
+        std::istream& read(std::istream&) override;
+        std::ostream& print(std::ostream&) const override;
+
+        friend std::istream& operator >> (std::istream& in, ControlSeeker& C);
+        friend std::ostream& operator << (std::ostream& out, const ControlSeeker& C);
+
+        ControlSeeker& EQUAL(const ControlSeeker& C);
+        ControlSeeker& operator = (const ControlSeeker& C);
+
+};
+
+    ControlSeeker& ControlSeeker::EQUAL(const ControlSeeker &C) {
+        SerialKiller::EQUAL(C);
+        Souvenirs = C.Souvenirs;
+
+        return *this;
+    }
+
+    ControlSeeker& ControlSeeker::operator=(const ControlSeeker &C) {
+        return (*this).EQUAL(C);
+    }
+
+
+    std::istream& ControlSeeker::read(std::istream& in){
+        if(!DoesItReads){
+            SerialKiller::read(in);
+        }
+        std::cout<<"Does anything seems to miss, a possible souvenir: ";
+        in >> this ->Souvenirs;
+
+        return in;
+    }
+
+    std::istream& operator >> (std::istream& in, ControlSeeker& C){
+        return C.read(in);
+    }
+
+    std::ostream& ControlSeeker::print(std::ostream& out) const {
+
+        if(!DoesItPrints){
+            SerialKiller::print(out);
+        }
+        std::cout<<"Does anything seems to miss, a possible souvenir: "<<(!getS() ? "NO" : "YES")<<std::endl;
+
+        return out;
+    }
+
+    std::ostream& operator << (std::ostream& out, const ControlSeeker& C ){
+        return C.print(out);
+    }
+
+class Hybrid : public MissionOriented, public Visionary, public ThrillSeeker, public ControlSeeker {
+
+    public:
+
+
+        Hybrid():SerialKiller()
+        {
+//            std::cout<<"DEFAULT";
+        }
+
+        Hybrid(char* name, int kc, float iq, Sex sex, bool ra, bool re, bool et, bool rd, bool c, bool h, bool s) :
+        SerialKiller(name, kc, iq, sex),
+        MissionOriented(name, kc, iq, sex, ra, re, et),
+        ThrillSeeker(name, kc, iq, sex,  h),
+        Visionary(name, kc, iq, sex, rd, c),
+        ControlSeeker(name, kc, iq, sex, s)
+        { std::cout<<"HYBRID";}
+
+        Hybrid(const Hybrid& H):
+            SerialKiller(H),
+            MissionOriented(H),
+            Visionary(H),
+            ThrillSeeker(H),
+            ControlSeeker(H)
+        {
+
+        }
+
+    Hybrid(bool silent) : SerialKiller(silent){}
+
+     ~Hybrid(){
+
+        if(SerialKiller::getName() == nullptr){
+            delete getName();
+        }
+    }
+
+
+        std::istream& read(std::istream&) override;
+        std::ostream& print(std::ostream&) const override;
+
+        friend std::istream& operator >> (std::istream& in, Hybrid& H);
+        friend std::ostream& operator << (std::ostream& out, const Hybrid& H);
+
+        Hybrid& EQUAL(const Hybrid& H);
+        Hybrid& operator = (const Hybrid& H);
+    };
+
+    Hybrid& Hybrid::EQUAL(const Hybrid &H) {
+        SerialKiller::EQUAL(H);
+        MissionOriented::EQUAL(H);
+        Visionary::EQUAL(H);
+        ThrillSeeker::EQUAL(H);
+        ControlSeeker::EQUAL(H);
+    }
+
+    Hybrid& Hybrid::operator=(const Hybrid &H) {
+        return (*this).EQUAL(H);
+    }
+
+    std::istream& Hybrid::read(std::istream& in){
+//        SerialKiller::read(in);
+        ThrillSeeker::read(in);
+        MissionOriented::read(in);
+        Visionary::read(in);
+        ControlSeeker::read(in);
+        DoesItReads = false;
+        return in;
+    }
+
+    std::istream& operator>>(std::istream& in, Hybrid& H){
+        return H.read(in);
+    }
+
+    std::ostream& Hybrid::print(std::ostream& out) const{
+//        if(!DoesItPrints){
+//            SerialKiller::print(out);
+//        }
+        ThrillSeeker::print(out);
+        MissionOriented::print(out);
+        Visionary::print(out);
+        ControlSeeker::print(out);
+
+        DoesItPrints = false;
+        return out;
+    }
+
+    std::ostream& operator << (std::ostream& out, const Hybrid& H){
+        return H.print(out);
+    }
+
+class WantedList{
+
+    private:
+        std::list<SerialKiller*> wantedList;
+
+    public:
+
+        WantedList(){ this -> wantedList = {};}
+
+        void addWanted(SerialKiller* K);
+        void printWanted();
+        void delloc();
+    };
+
+void WantedList::addWanted( SerialKiller* K) {
+    wantedList.push_back(K);
+}
+
+void WantedList::printWanted() {
+
+    if(wantedList.empty()){std::cout<<"The list is empty."<<std::endl;}
+
+    for(auto K : wantedList){
+        std::cout<<"Name: "<<K -> getName()<<std::endl;
+        //std::cout<<std::endl;
+        //std::cout<<"Is a "<< typeid(*K).name()<<std::endl;
+        std::cout<<"Type: "<<K -> getType()<<std::endl;
+        std::cout<<std::endl;
+    }
+}
+
+void WantedList::delloc() {
+
+    if(!wantedList.empty())
+    {
+        for(auto* K : wantedList)
+            delete K;
+    }
+}
+
+struct KILLER{
+
+    static std::unique_ptr<SerialKiller> CREATE(const std::string& killertype)
+    {
+        if(killertype == "Plane serial killer")
+        {
+            return std::make_unique<SerialKiller>();
+        }
+        else if(killertype == "MissionOriented")
+        {
+            return std::make_unique<MissionOriented>();
+        }
+        else if(killertype == "Visionary")
+        {
+            return std::make_unique<Visionary>();
+        }
+        else if(killertype == "ThrillSeeker")
+        {
+            return std::make_unique<ThrillSeeker>();
+        }
+        else if(killertype == "ControlSeeker")
+        {
+            return std::make_unique<ControlSeeker>();
+        }
+        else if(killertype == "Hybrid")
+        {
+            return std::make_unique<Hybrid>();
+        }
+        else
+        {
+            return nullptr;
+        }
+    }
+};
+
+void Menu(){
+    int k = 1;
+    WantedList W;
+
+    while (k) {
+        std::cout << "This is the official FDI MOST WANTED page." << std::endl;
+        std::cout << "Press 1 for requesting to add someone to the list." << std::endl;
+        std::cout << "Press 2 for a rudimentary diagnosis." << std::endl;
+        std::cout << "Press 3 to see the complete list." << std::endl;
+
+        std::cout << "Your option: ";
+        std::cin >> k;
+
+        switch (k) {
+            case 1: {
+
+                int p = 1;
+                while (p) {
+                    ///-----///
+                    std::cout << std::endl;
+                    std::cout
+                            << "If you don't have many information about this person press 1 to input a plain Serial Killer."
+                            << std::endl;
+                    std::cout << "Press 2 if you think this person might be the Mission Oriented type." << std::endl;
+                    std::cout << "Press 3 if you think this person might be the Visionary type." << std::endl;
+                    std::cout << "Press 4 if you think this person might be the Thrill Seeker type." << std::endl;
+                    std::cout << "Press 5 if you think this person might be the Control Seeker type." << std::endl;
+                    std::cout << "If it seems that this person fits multiple types press 6." << std::endl;
+                    std::cout << std::endl;
+                    std::cout << "Press 0 to return to the previous menu.";
+                    std::cout << std::endl;
+                    std::cout << "Your option: ";
+
+                    std::cin >> p;
+
+                    switch (p) {
+                        case 1: {
+
+                            auto *aux = new SerialKiller(false);
+                            std::cin >> *aux;
+                            W.addWanted(aux);
+                            aux->SetReads(false);
+                            break;
+                        }
+
+                        case 2: {
+                            auto *aux = new MissionOriented(false);
+                            std::cin >> *aux;
+                            W.addWanted(aux);
+                            aux->SetReads(false);
+                            break;
+                        }
+
+                        case 3: {
+                            auto *aux = new Visionary(false);
+                            std::cin >> *aux;
+                            W.addWanted(aux);
+                            aux->SetReads(false);
+                            break;
+                        }
+
+                        case 4: {
+                            auto *aux = new ThrillSeeker(false);
+                            std::cin >> *aux;
+                            W.addWanted(aux);
+                            aux->SetReads(false);
+                            break;
+                        }
+
+                        case 5: {
+                            auto *aux = new ControlSeeker(false);
+                            std::cin >> *aux;
+                            W.addWanted(aux);
+                            aux->SetReads(false);
+                            break;
+                        }
+
+                        case 6: {
+                            auto *aux = new Hybrid(false);
+                            std::cin >> *aux;
+                            W.addWanted(aux);
+                            break;
+                        }
+
+                        default: {
+                            p = 0;
+                            break;
+                        }
+
+                    }
+                }
+
+            }
+
+            case 2: {
+                int q = 1;
+
+                while (q) {
+                    std::cout << std::endl;
+                    std::cout << "There are 4 specific types of serial killers: " << std::endl;
+                    std::cout << "Mission Oriented(press 1 if you believe this person fits here)" << std::endl;
+                    std::cout << "Visionary(press 2 if you believe this person fits here)" << std::endl;
+                    std::cout << "Thrill Seeker(press 3 if you believe this person fits here)" << std::endl;
+                    std::cout << "Control Seeker(press 4 if you believe this person fits here)" << std::endl;
+                    std::cout << "If this person seems to fit in multiple types press 5." << std::endl;
+                    std::cout << std::endl;
+                    std::cout << "Press 0 to return to the previous menu.";
+                    std::cout << std::endl;
+
+                    std::cout << "Your option: ";
+                    std::cin >> q;
+
+                    switch (q) {
+                        case 1: {
+                            MissionOriented aux(false);
+                            std::cin >> aux;
+                            std::cout << aux;
+                            aux.SetReads(false);
+                            break;
+
+                        }
+
+                        case 2: {
+                            Visionary aux(false);
+                            std::cin >> aux;
+                            std::cout << aux;
+                            aux.SetReads(false);
+                            break;
+                        }
+
+                        case 3: {
+                            ThrillSeeker aux(false);
+                            std::cin >> aux;
+                            std::cout << aux;
+                            aux.SetReads(false);
+                            break;
+                        }
+
+                        case 4: {
+                            ControlSeeker aux(false);
+                            std::cin >> aux;
+                            std::cout << aux;
+                            aux.SetReads(false);
+                            break;
+                        }
+
+                        case 5: {
+                            Hybrid aux(1);
+                            std::cin >> aux;
+                            std::cout << aux;
+                            break;
+                        }
+
+                        default: {
+                            q = 0;
+                            break;
+                        }
+                    }
+                }
+                break;
+            }///case 2;
+
+            case 3: {
+                W.printWanted();
+                break;
+            }
+
+            default: {
+                k = 0;
+                break;
+            }
+        }
+    }
+
+    W.delloc();
+}
 int main() {
-    std::cout << "Welcome to the Pokemon world!!" << std::endl;
-    std::cout << "I see you already caught a pokemon, well done!" << std::endl;
-    std::cout << "You have to add it to your POKEDEX" << std::endl;
-    std::cout << "What is a POKEDEX?..." << std::endl;
-    std::cout << "A POKEDEX is like your own pokemon map that holds all your pokemons." << std::endl;
-    std::cout << "Every page of a POKEDEX can hold up to 5 different pokemons, and every page is specific to only one type." << std::endl;
-    std::cout << "You can have as many POKEDEX as you can carry." << std::endl;
-    std::cout << "So what type is your pokemon?" << std::endl;
-    std::cout << "You don't know??" << std::endl;
-    std::cout << "Well firs of all there ary 4 basic types: FIRE, WATER, STEEL and ELECTRIC." << std::endl;
-    std::cout << "And there are also 2 combination types: FIRE_STEEL type and WATER_ELECTRIC type." << std::endl;
-    std::cout << "Now that you know all of this your set to go. Good luck!!" << std::endl;
 
-//    std::string input;
-//    std::cin>>input;
-//    if(input == "water"){WATER_TYPE BULB("POKITON", 123, 12.2, 1234.4);}
-//
-//    if(input == "Vaporeon"){WATER_TYPE TRUID("POKassaON", 113, 1212,1234.4 /*Water_Species::Vaporeon*/);
-//                 std::cin>>TRUID;
-//                 std::cout<<TRUID;}
-//
-    WATER_TYPE BULB("POKITON", 123, 12.2, 234.4, Water_Species::Squirtle);
-    WATER_TYPE TRUID("POKassaON", 113, 1212,1000.2, Water_Species::Vaporeon);
-                   TRUID + BULB;
-                   std::cout<<BULB.getCP()<<std::endl;
-                   std::cout<<TRUID.getCP()<<std::endl;
-                   std::cout<<BULB.getType();
-//    if(input == "Squirtle"){WATER_TYPE<Water_Species> TRUID("POKassaON", 113, 1212, 1234.4,Water_Species::Squirtle);}
-//    if(input == "Blastoise"){WATER_TYPE<Water_Species> TRUID("POKassaON", 113, 1212, 1234.4,Water_Species::Blastoise);}
-//    if(input == "Seel"){WATER_TYPE<Water_Species> TRUID("POKassaON", 113, 1212, 1234.4,Water_Species::Seel);}
-//    if(input == "Horsea"){WATER_TYPE<Water_Species> TRUID("POKassaON", 113, 1212, 1234.4,Water_Species::Horsea);}
+    Menu();
+  //  std::unique_ptr<SerialKiller> JEFF = KILLER::CREATE("Visionary");
+
 
     return 0;
 }
-
-/////FA clasa POKEDEX templated ca sa faca adugare bazat pe class obiectului////////////
-
-
-
-
