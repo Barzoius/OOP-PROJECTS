@@ -10,7 +10,7 @@ SpaceCartography is an object-oriented programming (OOP) project designed to sim
 
 | CLASS  | DESCRIPTION | 
 |------- |-------------|
-| Coordinates | Class formed of three doubles representing the coordinate axies X, Y and Z used in most of the classes fro representing the position of objects.
+| Coordinates | Class formed of three doubles representing the coordinate axies X, Y and Z used in most of the classes for representing the position of objects.
 | Planet | Class representing a rounded astronomical body. |
 | Satellite | Class representing a rounded astronomical body that ortbits a planet. |
 | Star | Class representing a lumious astronomical body.|
