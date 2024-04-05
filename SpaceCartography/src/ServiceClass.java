@@ -3,12 +3,22 @@ import java.util.Comparator;
 import java.util.List;
 public class ServiceClass {
 
-    public List<StarSystem> starSystemList;
+    public List<StarSystem> m_starSystemList;
+    public List<Star> m_starsArray;
+    public List<Planet> m_planetsArray;
+    public List<Satellite> m_satellitesArray;
+    public List<PlanetSystem> m_planetsystemsArray;
 
+    protected SpaceShip spaceShip;
     public ServiceClass()
     {
-        starSystemList = new ArrayList<>();
+        m_starSystemList = new ArrayList<>();
+        m_starsArray = new ArrayList<>();
+        m_planetsArray = new ArrayList<>();
+        m_planetsystemsArray = new ArrayList<>();
+        m_satellitesArray = new ArrayList<>();
     }
+
     public void polarizeCoordinates(Coordinates coordinate) {
         double x = coordinate.getX();
         double y = coordinate.getY();
@@ -26,7 +36,7 @@ public class ServiceClass {
         return coord1.distanceTo(coord2);
     }
 
-    private  Coordinates getCoordinates(Object obj) {
+    private Coordinates getCoordinates(Object obj) {
         if (obj instanceof Planet) {
             return ((Planet) obj).getCoordinates();
         } else if (obj instanceof Star) {
@@ -37,12 +47,57 @@ public class ServiceClass {
             return ((StarSystem) obj).getCoordinates();
         }else if (obj instanceof PlanetSystem) {
             return ((PlanetSystem) obj).getCoordinates();
+        }else if (obj instanceof SpaceShip) {
+            return ((SpaceShip) obj).getCoordinates();
         }else {
             throw new IllegalArgumentException("ERROR::OBJECT_DOES_NOT_HAVE_COORDINATES");
         }
     }
 
+    public Star getStarByName(String name) {
+        for (Star star : m_starsArray) {
+            if (star.getName().equals(name)) {
+                return star;
+            }
+        }
+        return null;
+    }
 
+    public Planet getPlanetByName(String name) {
+        for (Planet planet : m_planetsArray) {
+            if (planet.getName().equals(name)) {
+                return planet;
+            }
+        }
+        return null;
+    }
+
+    public Satellite getSatelliteByName(String name) {
+        for (Satellite satellite : m_satellitesArray) {
+            if (satellite.getName().equals(name)) {
+                return satellite;
+            }
+        }
+        return null;
+    }
+
+    public PlanetSystem getPlanetSystemByName(String name) {
+        for (PlanetSystem planetSystem : m_planetsystemsArray) {
+            if (planetSystem.getName().equals(name)) {
+                return planetSystem;
+            }
+        }
+        return null;
+    }
+
+    public StarSystem getStarSystemByName(String name) {
+        for (StarSystem starSystem : m_starSystemList) {
+            if (starSystem.getName().equals(name)) {
+                return starSystem;
+            }
+        }
+        return null;
+    }
     public boolean isInArea(StarSystem starsys, Object obj)
     {
         double areaRadius = Math.sqrt(starsys.getArea()/ Math.PI);
@@ -56,7 +111,7 @@ public class ServiceClass {
     {
         List<Planet> planetsWithPossibleLife = new ArrayList<>();
 
-        for(StarSystem starsys : starSystemList)
+        for(StarSystem starsys : m_starSystemList)
         {
             for (PlanetSystem planetSystem : starsys.getPlanetSystems()) {
 
@@ -86,6 +141,59 @@ public class ServiceClass {
     }
 
 
+    //------------(ShowObjects_Methods)------------//
+
+    public void showPlanets()
+    {
+        for(Planet obj : m_planetsArray)
+        {
+            System.out.println(obj.getName());
+        }
+    }
+
+    public void showSatellites()
+    {
+        for(Satellite obj : m_satellitesArray)
+        {
+            System.out.println(obj.getName());
+        }
+    }
+
+    public void showPlanetSystems()
+    {
+        for(PlanetSystem obj : m_planetsystemsArray)
+        {
+            System.out.println(obj.getName());
+        }
+    }
+
+    public void showStars()
+    {
+        for(Star obj : m_starsArray)
+        {
+            System.out.println(obj.getName());
+        }
+    }
+
+    public void showStarSystems()
+    {
+        for(StarSystem obj : m_starSystemList)
+        {
+            System.out.println(obj.getName());
+        }
+    }
+    public void showSpaceShip()
+    {
+        if(this.spaceShip != null)
+        {
+            System.out.println(this.spaceShip);
+
+        }
+        else{
+            System.out.println("A_SPACESHIP_WAS_NOT_YET_CREATED");
+        }
+
+    }
 
     //------------(SpaceShip_Methods)------------//
 
@@ -94,6 +202,9 @@ public class ServiceClass {
         double deltaY = coords.getY() - spaceShip.getCoordinates().getY();
         double dirAngle = Math.atan2(deltaY, deltaX);
         spaceShip.setDirectionAngle(dirAngle);
+        spaceShip.setDestinationCoordinates(coords);
+        double initialDistance = spaceShip.getCoordinates().distanceTo(coords);
+        //spaceShip.setDistance(initialDistance);
     }
 
     public double aproxTimeToDestination(SpaceShip spaceShip, Coordinates coords){
@@ -101,6 +212,6 @@ public class ServiceClass {
         return (distace/(spaceShip.getSpeed()));
     }
 
-    //ceva fucntie pentru update pe locatie
+    //ceva functie pentru update pe locatie
     //   -se resorteaza listele
 }

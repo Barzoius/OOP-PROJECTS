@@ -18,9 +18,15 @@ public class StarSystem {
     public void setStar(Star star){
         if(this.m_CenterStar == null)
         {
-            this.m_CenterStar = star;
-            this.m_Coords = this.m_CenterStar.getCoordinates();
-            //star.setSystem(this.m_Name);
+            if(star instanceof PlanetHostingStar) {
+                this.m_CenterStar = star;
+                this.m_Coords = this.m_CenterStar.getCoordinates();
+                //star.setSystem(this.m_Name);
+            }
+            else {
+                System.out.println("ERROR::THE_STAR("+star.getName()+")_IS_NOT_A_PLANET_HOSTING_STAR.");
+            }
+
         }
     }
 
@@ -69,6 +75,13 @@ public class StarSystem {
         }
     }
 
+    public Star getCenteStar(){
+        return m_CenterStar;
+    }
+
+    public String getName(){
+        return m_Name;
+    }
     public double getArea() {
         return m_Area;
     }
