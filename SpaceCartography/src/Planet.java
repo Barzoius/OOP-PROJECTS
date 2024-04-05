@@ -16,7 +16,7 @@ public class Planet {
         this.m_PossibleLife = pLife;
         this.m_Coords = coords;
 
-        this.m_PlanetSystemName = "";
+        this.m_PlanetSystemName = "Not Specified";
     }
 
 

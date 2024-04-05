@@ -21,6 +21,16 @@ public class Star {
         this.m_Coords = coords;
     }
 
+    public static Star createStar(String name, double diameter, double gravPull, Coordinates coords) {
+        if (diameter > 100000) {
+            return new PlanetHostingStar(name, diameter, gravPull, coords);
+        } else if (diameter < 10000) {
+            return new DwarfStar(name, diameter, gravPull, coords);
+        } else {
+            return new Star(name, diameter, gravPull, coords);
+        }
+    }
+
     public String getName() {
         return m_Name;
     }
@@ -53,4 +63,16 @@ public class Star {
         this.m_Coords = coords;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("//------------(info)------------//\n");
+        sb.append(String.format("//Type:        %-16s  \n", getClass().getSimpleName()));
+        sb.append(String.format("//Name:        %-16s  \n", m_Name));
+        sb.append(String.format("//Diameter:    %-16s  \n", m_Diameter));
+        sb.append(String.format("//GravPull:    %-16s  \n", m_GravitationalPull));
+        sb.append(String.format("//Coordinates: %-14s   \n", m_Coords.toString()));
+        sb.append("//------------------------------//");
+        return sb.toString();
+    }
 }

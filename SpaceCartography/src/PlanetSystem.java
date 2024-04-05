@@ -1,10 +1,10 @@
 import java.util.*;
 public class PlanetSystem {
 
-    String m_Name;
-    Planet m_CenterPlanet;
-    Coordinates m_Coords;
-    Set<Satellite> m_Satellites;
+    private String m_Name;
+    private Planet m_CenterPlanet;
+    private Coordinates m_Coords;
+    private Set<Satellite> m_Satellites;
 
     public PlanetSystem(String name)
     {
