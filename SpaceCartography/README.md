@@ -1,4 +1,4 @@
-## SpaceCartography ##
+## SpaceCartography 🪐 ##
 
 ### __Short Summery about the theme:__
 
@@ -42,4 +42,35 @@ There are, as well, more general functionalities for most objects such as:
 - Retrieve planets based on their proximity to specified coordinates.
 - Retrieve and Show attributes of any type of objects.
 
+<hr>
 
+### ___Unfinished:__
+- The computeDistance() function of the ServiceClass:
+```java
+public double computeDistance(Object obj1, Object obj2)
+    {
+        Coordinates coord1 = getCoordinates(obj1);
+        Coordinates coord2 = getCoordinates(obj2);
+        return coord1.distanceTo(coord2);
+    }
+
+    private Coordinates getCoordinates(Object obj) {
+        if (obj instanceof Planet) {
+            return ((Planet) obj).getCoordinates();
+        } else if (obj instanceof Star) {
+            return ((Star) obj).getCoordinates();
+        } else if (obj instanceof Satellite) {
+            return ((Satellite) obj).getCoordinates();
+        } else if (obj instanceof StarSystem) {
+            return ((StarSystem) obj).getCoordinates();
+        }else if (obj instanceof PlanetSystem) {
+            return ((PlanetSystem) obj).getCoordinates();
+        }else if (obj instanceof SpaceShip) {
+            return ((SpaceShip) obj).getCoordinates();
+        }else {
+            throw new IllegalArgumentException("ERROR::OBJECT_DOES_NOT_HAVE_COORDINATES");
+        }
+    }
+```
+As of rightnow the function getCoordinates throws and error but does not treat it.
+- The MenuClass is incomplete. It offers access to most functionalities but not in a very clean way:
