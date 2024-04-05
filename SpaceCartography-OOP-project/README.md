@@ -1,1 +1,3 @@
-<h3>SpaceCartography<h3>
+<h1>SpaceCartography<h1>
+
+<hr>
