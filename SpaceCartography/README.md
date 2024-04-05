@@ -44,7 +44,7 @@ There are, as well, more general functionalities for most objects such as:
 
 <hr>
 
-### ___Unfinished:__
+### __Unfinished:__
 - The computeDistance() function of the ServiceClass:
 ```java
 public double computeDistance(Object obj1, Object obj2)
